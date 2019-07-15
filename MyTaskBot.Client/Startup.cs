@@ -2,7 +2,7 @@ using LineDC.Liff;
 using Microsoft.AspNetCore.Components.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace LineDC.LiffOnBlazor
+namespace MyTaskBot.Client
 {
     public class Startup
     {

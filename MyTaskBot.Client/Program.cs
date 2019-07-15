@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Blazor.Hosting;
 
-namespace LineDC.LiffOnBlazor
+namespace MyTaskBot.Client
 {
     public class Program
     {

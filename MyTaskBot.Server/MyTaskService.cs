@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MyTaskBot.Server
@@ -45,9 +46,13 @@ namespace MyTaskBot.Server
         {
             log.LogInformation($"{nameof(CreateUser)} method prosessing...");
 
-            if (string.IsNullOrEmpty(user?.GroupId) || string.IsNullOrEmpty(user?.UserId))
+            if (string.IsNullOrEmpty(user?.GroupId))
             {
-                return new BadRequestResult();
+                return new BadRequestObjectResult(JsonConvert.SerializeObject(new { Message = $"{nameof(user.GroupId)} is required." }));
+            }
+            if (string.IsNullOrEmpty(user?.UserId))
+            {
+                return new BadRequestObjectResult(JsonConvert.SerializeObject(new { Message = $"{nameof(user.UserId)} is required." }));
             }
             try
             {
@@ -63,8 +68,90 @@ namespace MyTaskBot.Server
 
         }
 
+        [FunctionName("UpdateUser")]
+        public async Task<IActionResult> UpdateUser(
+            [HttpTrigger(AuthorizationLevel.Function, "put", Route = "users/{id}")] HttpRequest req, 
+            string id,
+            ILogger log)
+        {
+            try
+            {
+                log.LogInformation($"{nameof(UpdateTask)} method prosessing...");
+
+                var json = await req.ReadAsStringAsync();
+                var user = JsonConvert.DeserializeObject<Model.User>(json);
+                
+                await documentClient.ReplaceDocumentAsync(
+                    UriFactory.CreateDocumentUri("MyTaskBot", "Users", id),
+                    user);
+
+                return new OkResult();
+            }
+            catch (JsonSerializationException e)
+            {
+                return new BadRequestObjectResult(e.Message);
+            }
+            catch (DocumentClientException e)
+            {
+                return new BadRequestObjectResult(e.Message);
+            }
+
+        }
+
+        [FunctionName("GetUsers")]
+        public IActionResult GetUsers(
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "{grpupId}/users")] string groupId, 
+            ILogger log)
+        {
+            try
+            {
+                log.LogInformation($"{nameof(GetUsers)} method prosessing...");
+
+                var query = documentClient.CreateDocumentQuery<User>(UriFactory.CreateDocumentCollectionUri("MyTaskBot", "Users"),
+                    new FeedOptions() { PartitionKey = new PartitionKey(groupId) }).AsEnumerable();
+                return new JsonResult(query.ToArray());
+            }
+            catch (JsonSerializationException e)
+            {
+                return new BadRequestObjectResult(e.Message);
+            }
+            catch (DocumentClientException e)
+            {
+                return new BadRequestObjectResult(e.Message);
+            }
+        }
+
+        [FunctionName("GetUser")]
+        public async Task<IActionResult> GetUser(
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "{grpupId}/users/{userId}")] string groupId,
+            string userId,
+            ILogger log)
+        {
+            try
+            {
+                log.LogInformation($"{nameof(GetUser)} method prosessing...");
+
+                var response =
+                    await documentClient.ReadDocumentAsync<User>(
+                        UriFactory.CreateDocumentUri("MyTaskBot", "Users", userId),
+                        new RequestOptions() { PartitionKey = new PartitionKey(groupId) });
+                return new JsonResult(response.Document);
+            }
+            catch (JsonSerializationException e)
+            {
+                return new BadRequestObjectResult(e.Message);
+            }
+            catch (DocumentClientException e)
+            {
+                return new BadRequestObjectResult(e.Message);
+            }
+
+        }
+
         [FunctionName("CreateTask")]
-        public async Task<IActionResult> CreateTask([HttpTrigger(AuthorizationLevel.Function, "post", Route = "tasks")] HttpRequest req, ILogger log)
+        public async Task<IActionResult> CreateTask(
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "tasks")] HttpRequest req, 
+            ILogger log)
         {
 
             try
@@ -96,7 +183,10 @@ namespace MyTaskBot.Server
         }
 
         [FunctionName("UpdateTask")]
-        public async Task<IActionResult> UpdateTask([HttpTrigger(AuthorizationLevel.Function, "put", Route = "tasks/{id}")] HttpRequest req ,string id, ILogger log)
+        public async Task<IActionResult> UpdateTask(
+            [HttpTrigger(AuthorizationLevel.Function, "put", Route = "tasks/{id}")] HttpRequest req ,
+            string id, 
+            ILogger log)
         {
             try
             {

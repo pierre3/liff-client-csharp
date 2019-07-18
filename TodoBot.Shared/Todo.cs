@@ -1,20 +1,19 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System;
 
-namespace MyTaskBot.Model
-{
+namespace TodoBot.Shared
+{ 
     [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
-    public class MyTask
+    public class Todo
     {
         public string Id { get; set; }
-        public string GroupId { get; set; }
+        public string UserId { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
         public Status Status { get; set; }
-        public string RequestedUserId { get; set; }
-        public string AssignedUserId { get; set; }
-
-        public MyTask()
+        public DateTime TimeLimit { get; set; }  
+        public Todo()
         {
 
         }

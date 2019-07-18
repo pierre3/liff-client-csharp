@@ -1,14 +1,14 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Converters;
-namespace MyTaskBot.Model
+namespace TodoBot.Shared
 {
     [JsonConverter(typeof(StringEnumConverter), new object[] { true })]
     public enum Status
     {
-        New,
-        Performed,
-        Close,
+        Ready,
+        Doing,
+        Done,
         Canceled
     }
 }

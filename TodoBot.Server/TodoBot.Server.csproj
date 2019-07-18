@@ -2,8 +2,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <AzureFunctionsVersion>v2</AzureFunctionsVersion>
-    <RootNamespace>MyTaskBot.Server</RootNamespace>
-    <AssemblyName>MyTaskBot.Server</AssemblyName>
+    <RootNamespace>TodoBot.Server</RootNamespace>
+    <AssemblyName>TodoBot.Server</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="2.5.1" />
@@ -13,7 +13,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MyTaskBot.Model\MyTaskBot.Model.csproj" />
+    <ProjectReference Include="..\TodoBot.Shared\TodoBot.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

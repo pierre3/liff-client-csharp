@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MyTaskBot.Model\MyTaskBot.Model.csproj" />
+    <ProjectReference Include="..\MyTaskBot.Model\TodoBot.Shared.csproj" />
   </ItemGroup>
 
 </Project>

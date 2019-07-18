@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Blazor.Hosting;
 
-namespace MyTaskBot.Client
+namespace TodoBot.Client
 {
     public class Program
     {

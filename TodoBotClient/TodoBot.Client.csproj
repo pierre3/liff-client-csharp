@@ -8,8 +8,8 @@
     </RestoreAdditionalProjectSources>
     <LangVersion>7.3</LangVersion>
     <RazorLangVersion>3.0</RazorLangVersion>
-    <AssemblyName>MyTaskBot.Client</AssemblyName>
-    <RootNamespace>MyTaskBot.Client</RootNamespace>
+    <AssemblyName>TodoBot.Client</AssemblyName>
+    <RootNamespace>TodoBot.Client</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

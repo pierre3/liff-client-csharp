@@ -6,22 +6,23 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TodoBot.Server.Services;
 
-[assembly: FunctionsStartup(typeof(MyTaskBot.Server.Startup))]
-namespace MyTaskBot.Server
+[assembly: FunctionsStartup(typeof(TodoBot.Server.Startup))]
+namespace TodoBot.Server
 {
     public class Startup : FunctionsStartup
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services.AddSingleton<IDocumentClient>(provider => 
+            builder.Services.AddSingleton<ITodoRepository>(provider => 
             {
                 var configuration = provider.GetRequiredService<IConfiguration>();
 
                 var accountEndpoint = new Uri(configuration.GetValue<string>("Cosmos:AccountEndpoint"));
                 var accountKey = configuration.GetValue<string>("Cosmos:AccountKey");
                 
-                return new DocumentClient(accountEndpoint, accountKey);
+                return new CosmosDbTodoRepository(accountEndpoint, accountKey);
             });
         }
     }

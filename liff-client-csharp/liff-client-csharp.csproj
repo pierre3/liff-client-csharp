@@ -27,9 +27,4 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.Browser" Version="3.0.0-preview6.19307.2" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\MyTaskBot.Model\TodoBot.Shared.csproj" />
-  </ItemGroup>
-
 </Project>

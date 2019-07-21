@@ -1,6 +1,9 @@
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
+using Microsoft.Azure.Documents.Linq;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TodoBot.Shared;
 
@@ -51,6 +54,35 @@ namespace TodoBot.Server.Services
             catch (Exception e)
             {
                 throw new TodoRepositoryException($"An error occurred in the {nameof(UpdateTodoAsync)} methods.", e);
+            }
+        }
+
+        public Task<IList<Todo>> GetTodoListAsync(string userId)
+        {
+            try
+            {
+                var query = documentClient.CreateDocumentQuery<Todo>(
+                    UriFactory.CreateDocumentCollectionUri(dbName, collectionName),
+                    new FeedOptions() { PartitionKey = new PartitionKey(userId)})
+                    .AsEnumerable();
+                return Task.FromResult<IList<Todo>>(query.ToList());
+                
+            }
+            catch (Exception e)
+            {
+                throw new TodoRepositoryException($"An error occurred in the {nameof(GetTodoListAsync)} methods.", e);
+            }
+        }
+
+        public async Task DeleteTodoAsync(string id)
+        {
+            try
+            {
+                await documentClient.DeleteDocumentAsync(UriFactory.CreateDocumentUri(dbName, collectionName, id));
+            }
+            catch (Exception e)
+            {
+                throw new TodoRepositoryException($"An error occurred in the {nameof(DeleteTodoAsync)} methods.", e);
             }
         }
     }

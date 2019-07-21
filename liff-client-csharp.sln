@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.29001.49
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "liff-client-csharp", "liff-client-csharp\liff-client-csharp.csproj", "{6C5BFD2D-8110-4F6F-8EA1-804170768186}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoBot.Client", "TodoBotClient\TodoBot.Client.csproj", "{20D1B32D-A029-404A-B6B0-E2AC4BA1A8E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoBot.Server", "TodoBot.Server\TodoBot.Server.csproj", "{1D648C05-6540-4E54-B59B-025C5085300D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoBot.Shared", "TodoBot.Shared\TodoBot.Shared.csproj", "{B0613210-F56D-44CB-B684-5E1C3EA3D8AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoBot.Shared", "TodoBot.Shared\TodoBot.Shared.csproj", "{57F1EBEA-0729-434A-9844-094C591E200E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoBot.Server", "TodoBot.Server\TodoBot.Server.csproj", "{E2993731-FFF4-49C1-A83A-37B59EF95B98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoBot.Client", "TodoBot.Client\TodoBot.Client.csproj", "{523BDBA8-DEAA-4C8B-80C6-BB502F05A714}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,18 +21,18 @@ Global
 		{6C5BFD2D-8110-4F6F-8EA1-804170768186}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C5BFD2D-8110-4F6F-8EA1-804170768186}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C5BFD2D-8110-4F6F-8EA1-804170768186}.Release|Any CPU.Build.0 = Release|Any CPU
-		{20D1B32D-A029-404A-B6B0-E2AC4BA1A8E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{20D1B32D-A029-404A-B6B0-E2AC4BA1A8E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{20D1B32D-A029-404A-B6B0-E2AC4BA1A8E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{20D1B32D-A029-404A-B6B0-E2AC4BA1A8E6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B0613210-F56D-44CB-B684-5E1C3EA3D8AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B0613210-F56D-44CB-B684-5E1C3EA3D8AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B0613210-F56D-44CB-B684-5E1C3EA3D8AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B0613210-F56D-44CB-B684-5E1C3EA3D8AD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E2993731-FFF4-49C1-A83A-37B59EF95B98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E2993731-FFF4-49C1-A83A-37B59EF95B98}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E2993731-FFF4-49C1-A83A-37B59EF95B98}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E2993731-FFF4-49C1-A83A-37B59EF95B98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D648C05-6540-4E54-B59B-025C5085300D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D648C05-6540-4E54-B59B-025C5085300D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D648C05-6540-4E54-B59B-025C5085300D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D648C05-6540-4E54-B59B-025C5085300D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57F1EBEA-0729-434A-9844-094C591E200E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57F1EBEA-0729-434A-9844-094C591E200E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57F1EBEA-0729-434A-9844-094C591E200E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57F1EBEA-0729-434A-9844-094C591E200E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{523BDBA8-DEAA-4C8B-80C6-BB502F05A714}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{523BDBA8-DEAA-4C8B-80C6-BB502F05A714}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{523BDBA8-DEAA-4C8B-80C6-BB502F05A714}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{523BDBA8-DEAA-4C8B-80C6-BB502F05A714}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -21,7 +21,7 @@ namespace TodoBot.Server
 
         [FunctionName("CreateTodo")]
         public async Task<IActionResult> CreateTodo(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "todoList")] HttpRequest req, 
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "todoList")] HttpRequest req, 
             ILogger log)
         {
             log.LogInformation($"{nameof(CreateTodo)} method prosessing...");
@@ -51,7 +51,7 @@ namespace TodoBot.Server
 
         [FunctionName("UpdateTodo")]
         public async Task<IActionResult> UpdateTodo(
-            [HttpTrigger(AuthorizationLevel.Function, "put", Route = "todoList/{id}")] HttpRequest req ,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "todoList/{id}")] HttpRequest req ,
             string id, 
             ILogger log)
         {
@@ -75,6 +75,49 @@ namespace TodoBot.Server
 
         }
 
+        [FunctionName("GetTodoList")]
+        public async Task<IActionResult> GetTodoList(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "{userId}/todoList")] HttpRequest req,
+            string userId,
+            ILogger log)
+        {
+            log.LogInformation($"{nameof(GetTodoList)} method prosessing...");
+            try
+            {
+                var todolist = await todoRepository.GetTodoListAsync(userId);
+                return new OkObjectResult(todolist);
+            }
+            catch (JsonSerializationException e)
+            {
+                return new BadRequestObjectResult(e.Message);
+            }
+            catch (TodoRepositoryException e)
+            {
+                return new BadRequestObjectResult($"{e.Message}: {e.InnerException.Message}");
+            }
+        }
+
+        [FunctionName("DeleteTodo")]
+        public async Task<IActionResult> DeleteTodoAsync(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "todoList/{id}")] HttpRequest req,
+            string id,
+            ILogger log)
+        {
+            log.LogInformation($"{nameof(DeleteTodoAsync)} method prosessing...");
+            try
+            {
+                await todoRepository.DeleteTodoAsync(id);
+                return new OkResult();
+            }
+            catch (JsonSerializationException e)
+            {
+                return new BadRequestObjectResult(e.Message);
+            }
+            catch (TodoRepositoryException e)
+            {
+                return new BadRequestObjectResult($"{e.Message}: {e.InnerException.Message}");
+            }
+        }
     }
 
 }

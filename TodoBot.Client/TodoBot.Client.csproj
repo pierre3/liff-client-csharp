@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\liff-client-csharp\liff-client-csharp.csproj" />
+    <ProjectReference Include="..\TodoBot.Shared\TodoBot.Shared.csproj" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties properties_4launchsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

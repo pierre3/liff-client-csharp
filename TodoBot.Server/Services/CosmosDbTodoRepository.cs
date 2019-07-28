@@ -63,9 +63,10 @@ namespace TodoBot.Server.Services
             {
                 var query = documentClient.CreateDocumentQuery<Todo>(
                     UriFactory.CreateDocumentCollectionUri(dbName, collectionName),
-                    new FeedOptions() { PartitionKey = new PartitionKey(userId)})
+                    new FeedOptions() { PartitionKey = new PartitionKey(userId) })
                     .AsEnumerable();
-                return Task.FromResult<IList<Todo>>(query.ToList());
+                    
+                return Task.FromResult<IList<Todo>>(query.OrderBy(todo => todo.DueDate).ToList());
                 
             }
             catch (Exception e)
@@ -74,11 +75,20 @@ namespace TodoBot.Server.Services
             }
         }
 
-        public async Task DeleteTodoAsync(string id)
+        public async Task<Todo> GetTodoAsync(string userId, string id)
+        {
+            var doc = await documentClient.ReadDocumentAsync<Todo>(UriFactory.CreateDocumentUri(dbName, collectionName, id)
+                ,new RequestOptions() { PartitionKey=new PartitionKey(userId)});
+            return doc.Document;
+        }
+
+        public async Task DeleteTodoAsync(string userId, string id)
         {
             try
             {
-                await documentClient.DeleteDocumentAsync(UriFactory.CreateDocumentUri(dbName, collectionName, id));
+                await documentClient.DeleteDocumentAsync(
+                    UriFactory.CreateDocumentUri(dbName, collectionName, id),
+                    new RequestOptions() { PartitionKey = new PartitionKey(userId)});
             }
             catch (Exception e)
             {

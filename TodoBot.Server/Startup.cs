@@ -15,7 +15,7 @@ namespace TodoBot.Server
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services.AddSingleton<ITodoRepository>(provider => 
+            builder.Services.AddTransient<ITodoRepository>(provider => 
             {
                 var configuration = provider.GetRequiredService<IConfiguration>();
 

@@ -1,0 +1,31 @@
+﻿@page "/create"
+@inject ILiffClient Liff
+@inject IJSRuntime JSRuntime
+@inject HttpClient httpClient
+
+
+<TodoEditor Todo="new Todo() { DueDate = DateTime.Now}"
+            ButtonName="作成"
+            ButtonClickAsync="CreateTodoAsync"></TodoEditor>
+
+<Alert ErrorMessage="@ErrorMessage"></Alert>
+
+@code{
+    string ErrorMessage;
+    async Task CreateTodoAsync(Todo todo)
+    {
+        ErrorMessage = null;
+        try
+        {
+            todo.UserId = Liff.Data.Context.UserId;
+            //var token = await Liff.GetAccessTokenAsync();
+            var json = JsonConvert.SerializeObject(todo);
+            await httpClient.PostAsync("https://mytaskbot.azurewebsites.net/api/todoList",
+                new StringContent(json, System.Text.Encoding.UTF8, "application/json"));
+        }
+        catch (Exception e)
+        {
+            ErrorMessage = e.Message;
+        }
+    }
+}

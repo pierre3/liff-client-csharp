@@ -97,16 +97,40 @@ namespace TodoBot.Server
             }
         }
 
+        [FunctionName("GetTodo")]
+        public async Task<IActionResult> GetTodo(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "{userId}/todoList/{id}")] HttpRequest req,
+            string userId,
+            string id,
+            ILogger log)
+        {
+            log.LogInformation($"{nameof(GetTodoList)} method prosessing...");
+            try
+            {
+                var todo = await todoRepository.GetTodoAsync(userId, id);
+                return new OkObjectResult(todo);
+            }
+            catch(JsonSerializationException e)
+            {
+                return new BadRequestObjectResult(e.Message);
+            }
+            catch(TodoRepositoryException e)
+            {
+                return new BadRequestObjectResult($"{e.Message}: {e.InnerException.Message}");
+            }
+        }
+
         [FunctionName("DeleteTodo")]
         public async Task<IActionResult> DeleteTodoAsync(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "todoList/{id}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "{userId}/todoList/{id}")] HttpRequest req,
+            string userId,
             string id,
             ILogger log)
         {
             log.LogInformation($"{nameof(DeleteTodoAsync)} method prosessing...");
             try
             {
-                await todoRepository.DeleteTodoAsync(id);
+                await todoRepository.DeleteTodoAsync(userId, id);
                 return new OkResult();
             }
             catch (JsonSerializationException e)

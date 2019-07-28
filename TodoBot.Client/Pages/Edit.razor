@@ -1,0 +1,55 @@
+﻿@page "/edit/{Id}"
+@inject ILiffClient Liff
+@inject IJSRuntime JSRuntime
+@inject HttpClient httpClient
+
+@if (Todo == null)
+{
+    <p class="text-info">Loading...</p>
+}
+else
+{
+    <TodoEditor Todo="Todo"
+                ButtonName="更新"
+                ButtonClickAsync="UpdateTodoAsync"></TodoEditor>
+}
+<Alert ErrorMessage="@ErrorMessage"></Alert>
+
+@code{
+    [Parameter]
+    string Id { get; set; }
+
+    Todo Todo { get; set; }
+
+    string ErrorMessage;
+
+    protected override async Task OnInitAsync()
+    {
+        try
+        {
+            Todo = await GetTodoAsync();
+        }
+        catch (Exception e)
+        {
+            ErrorMessage = e.ToString();
+        }
+    }
+
+    async Task<Todo> GetTodoAsync()
+    {
+
+        var json = await httpClient.GetStringAsync($"https://mytaskbot.azurewebsites.net/api/{Liff.Data.Context.UserId}/todoList/{Id}");
+        return JsonConvert.DeserializeObject<Todo>(json);
+    }
+
+    async Task UpdateTodoAsync(Todo todo)
+    {
+
+        todo.UserId = Liff.Data.Context.UserId;
+        //var token = await Liff.GetAccessTokenAsync();
+        var json = JsonConvert.SerializeObject(todo);
+        await httpClient.PutAsync($"https://mytaskbot.azurewebsites.net/api/todoList/{Id}",
+            new StringContent(json, System.Text.Encoding.UTF8, "application/json"));
+
+    }
+}

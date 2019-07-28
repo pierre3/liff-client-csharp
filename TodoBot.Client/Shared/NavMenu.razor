@@ -1,35 +1,25 @@
 ﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">LiffAppOnBlazor</a>
-    <button class="navbar-toggler" onclick="@ToggleNavMenu">
+    <a class="navbar-brand" href="">LIFF Todo App</a>
+    <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
     </button>
 </div>
 
-<div class="@NavMenuCssClass" onclick="@ToggleNavMenu">
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
+                <span class="oi oi-list" aria-hidden="true"></span> Todo
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="todo/create">
-                <span class="oi oi-home" aria-hidden="true"></span> Create Todo
+            <NavLink class="nav-link" href="create">
+                <span class="oi oi-plus" aria-hidden="true"></span> Add Todo
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="todo/list">
-                <span class="oi oi-home" aria-hidden="true"></span> Todo List
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="send">
-                <span class="oi oi-home" aria-hidden="true"></span> Send Message
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="links">
-                <span class="oi oi-home" aria-hidden="true"></span> Links
+            <NavLink class="nav-link" href="profile">
+                <span class="oi oi-person" aria-hidden="true"></span> Profile
             </NavLink>
         </li>
     </ul>

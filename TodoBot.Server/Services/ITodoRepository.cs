@@ -9,6 +9,7 @@ namespace TodoBot.Server.Services
         Task<string> CreateTodoAsync(Todo todo);
         Task UpdateTodoAsync(string id, Todo todo);
         Task<IList<Todo>> GetTodoListAsync(string userId);
-        Task DeleteTodoAsync(string id);
+        Task<Todo> GetTodoAsync(string userId, string id);
+        Task DeleteTodoAsync(string userId, string id);
     }
 }

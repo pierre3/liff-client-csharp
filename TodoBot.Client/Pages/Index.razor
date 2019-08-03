@@ -130,7 +130,7 @@ else
             InfoMessage += $"Start -> GetTodoListAsync()";
             
             var list = await HttpClient.GetTodoListAsync(Liff.AccessToken, Liff.Data.Context.UserId);
-            InfoMessage += $"Todo list count: {list.Count}";
+            InfoMessage += $"\nTodo list count: {list.Count}";
             switch (Filter)
             {
                 case FilterType.NotCompleted:
@@ -146,7 +146,7 @@ else
                     TodoList = list.Where(todo => todo.Status == Status.Done || todo.Status == Status.Canceled).ToList();
                     break;
             }
-            InfoMessage = $"Filterd Todo list count: {TodoList.Count}";
+            InfoMessage += $"\nFilterd Todo list count: {TodoList.Count}";
             
         }
         catch (Exception e)

@@ -29,6 +29,7 @@
         </button>
     </div>
 </header>
+<Alert Message="@InfoMessage" AlertType="info"></Alert>
 
 @if (TodoList == null)
 {
@@ -81,7 +82,7 @@ else
     }
 }
 <Alert Message="@ErrorMessage" AlertType="danger"></Alert>
-<Alert Message="@InfoMessage" AlertType="info"></Alert>
+
 
 @code{
     enum FilterType
@@ -115,6 +116,7 @@ else
     {
         ErrorMessage = null;
         TodoList=null;
+        InfoMessage = "Loading todo list...";
         try
         {
             if(string.IsNullOrEmpty(Liff.AccessToken))
@@ -125,9 +127,10 @@ else
             {
                 ErrorMessage = "Liff.Data has not been initialized.";
             }
-
+            InfoMessage += $"Start -> GetTodoListAsync()";
+            
             var list = await HttpClient.GetTodoListAsync(Liff.AccessToken, Liff.Data.Context.UserId);
-            InfoMessage = $"Todo list count: {list.Count}";
+            InfoMessage += $"Todo list count: {list.Count}";
             switch (Filter)
             {
                 case FilterType.NotCompleted:

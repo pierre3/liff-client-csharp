@@ -99,6 +99,16 @@ else
 
     protected override async Task OnInitAsync()
     {
+        ErrorMessage = null;
+        try
+        {
+            await Liff.InitializeAsync(JSRuntime);
+            await Liff.GetAccessTokenAsync();
+        }
+        catch (Exception e)
+        {
+            ErrorMessage = e.ToString();
+        }
         await ListTodoAsync();
     }
 

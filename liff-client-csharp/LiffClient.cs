@@ -25,6 +25,7 @@ namespace LineDC.Liff
             Data = null;
             Profile = null;
             Initialized = false;
+            AccessToken = null;
         }
 
         public async Task InitializeAsync(IJSRuntime jSRuntime)

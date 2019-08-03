@@ -106,6 +106,7 @@ else
             ErrorMessage = e.ToString();
         }
         await ListTodoAsync();
+        StateHasChanged();
     }
 
     private async Task ListTodoAsync()
@@ -131,7 +132,6 @@ else
                     TodoList = list.Where(todo => todo.Status == Status.Done || todo.Status == Status.Canceled).ToList();
                     break;
             }
-            StateHasChanged();
         }
         catch (Exception e)
         {

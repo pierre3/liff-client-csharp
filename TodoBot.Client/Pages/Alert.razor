@@ -1,7 +1,7 @@
 ﻿@if (!string.IsNullOrEmpty(ErrorMessage))
 {
     <div class="alert-danger">
-        ErrorMessage
+        @ErrorMessage
         <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="@(ErrorMessage=null)">
             <span aria-hidden="true">&times;</span>
         </button>

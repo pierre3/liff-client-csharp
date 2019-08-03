@@ -1,7 +1,7 @@
 ﻿@page "/edit/{Id}"
 @inject ILiffClient Liff
 @inject IJSRuntime JSRuntime
-@inject HttpClient httpClient
+@inject HttpClient HttpClient
 
 @if (Todo == null)
 {
@@ -27,7 +27,7 @@ else
     {
         try
         {
-            Todo = await GetTodoAsync();
+            Todo = await HttpClient.GetTodoAsync(Liff.AccessToken,Liff.Data.Context.UserId,Id);
         }
         catch (Exception e)
         {
@@ -35,21 +35,9 @@ else
         }
     }
 
-    async Task<Todo> GetTodoAsync()
-    {
-
-        var json = await httpClient.GetStringAsync($"https://mytaskbot.azurewebsites.net/api/{Liff.Data.Context.UserId}/todoList/{Id}");
-        return JsonConvert.DeserializeObject<Todo>(json);
-    }
-
     async Task UpdateTodoAsync(Todo todo)
     {
-
         todo.UserId = Liff.Data.Context.UserId;
-        //var token = await Liff.GetAccessTokenAsync();
-        var json = JsonConvert.SerializeObject(todo);
-        await httpClient.PutAsync($"https://mytaskbot.azurewebsites.net/api/todoList/{Id}",
-            new StringContent(json, System.Text.Encoding.UTF8, "application/json"));
-
+        await HttpClient.UpdateTodoAsync(Liff.AccessToken, Id, todo);
     }
 }

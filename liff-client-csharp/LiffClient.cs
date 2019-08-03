@@ -15,6 +15,8 @@ namespace LineDC.Liff
 
         public Profile Profile { get; protected set; }
 
+        public string AccessToken { get; protected set; }
+
         public LiffClient()
         { }
 
@@ -46,8 +48,8 @@ namespace LineDC.Liff
         public async Task CloseWindowAsync()
             => await JSRuntime.InvokeAsync<object>("liff.closeWindow");
 
-        public Task<string> GetAccessTokenAsync()
-            => JSRuntime.InvokeAsync<string>("liff.getAccessToken");
+        public async Task GetAccessTokenAsync()
+            => AccessToken= await JSRuntime.InvokeAsync<string>("liff.getAccessToken");
 
     }
 }

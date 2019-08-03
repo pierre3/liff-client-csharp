@@ -1,7 +1,7 @@
 ﻿@page "/"
 @inject ILiffClient Liff
 @inject IJSRuntime JSRuntime
-@inject HttpClient httpClient
+@inject HttpClient HttpClient
 @inject IUriHelper UriHelper
 
 @if (TodoList == null)
@@ -68,11 +68,11 @@ else
 
                 @if (todo.Status == Status.Ready)
                 {
-                    <button class="btn btn-primary" @onclick="@(async ()=> await UpdateStatusAsync(todo,Status.Doing))">これをやる！</button>
+                    <button class="btn btn-primary" @onclick="@(async ()=> await UpdateStatusAsync(todo,Status.Doing))">やる！</button>
                 }
                 @if (todo.Status == Status.Doing)
                 {
-                    <button class="btn btn-success" @onclick="@(async ()=> await UpdateStatusAsync(todo,Status.Done))">終わりました</button>
+                    <button class="btn btn-success" @onclick="@(async ()=> await UpdateStatusAsync(todo,Status.Done))">完了にする</button>
                 }
                 @if (todo.Status == Status.Done || todo.Status == Status.Canceled)
                 {
@@ -107,9 +107,8 @@ else
         ErrorMessage = null;
         try
         {
-            var userId = Liff.Data.Context.UserId;
-            var json = await httpClient.GetStringAsync($"https://mytaskbot.azurewebsites.net/api/{userId}/todoList");
-            var list = JsonConvert.DeserializeObject<IList<Todo>>(json) ?? new List<Todo>();
+            var list = await HttpClient.GetTodoListAsync(Liff.AccessToken, Liff.Data.Context.UserId);
+
             switch (Filter)
             {
                 case FilterType.NotCompleted:
@@ -146,13 +145,8 @@ else
         try
         {
             todo.Status = status;
-            //var token = await Liff.GetAccessTokenAsync();
-            var json = JsonConvert.SerializeObject(todo);
-            await httpClient.PutAsync($"https://mytaskbot.azurewebsites.net/api/todoList/{todo.Id}",
-                new StringContent(json, System.Text.Encoding.UTF8, "application/json"));
-
+            await HttpClient.UpdateTodoAsync(Liff.AccessToken, todo.Id, todo);
             await ListTodoAsync();
-
         }
         catch (Exception e)
         {
@@ -165,9 +159,7 @@ else
         ErrorMessage = null;
         try
         {
-            var userId = Liff.Data.Context.UserId;
-            await httpClient.DeleteAsync($"https://mytaskbot.azurewebsites.net/api/{userId}/todoList/{id}");
-
+            await HttpClient.DeleteTodoAsync(Liff.AccessToken, Liff.Data.Context.UserId, id);
             await ListTodoAsync();
         }
         catch (Exception e)

@@ -11,12 +11,14 @@ using TodoBot.Shared;
 namespace TodoBot.Server
 {
     public class TodoBotFunction
-    {
+    {   
         private readonly ITodoRepository todoRepository;
-        
-        public TodoBotFunction(ITodoRepository todoRepository)
+        private readonly ILineTokenService lineTokenService;
+
+        public TodoBotFunction(ITodoRepository todoRepository, ILineTokenService lineTokenService)
         {
             this.todoRepository = todoRepository;
+            this.lineTokenService = lineTokenService;
         }
 
         [FunctionName("CreateTodo")]
@@ -25,6 +27,11 @@ namespace TodoBot.Server
             ILogger log)
         {
             log.LogInformation($"{nameof(CreateTodo)} method prosessing...");
+            if(!await lineTokenService.VerifyTokenAsync(req.Headers[ApiServer.AccessTokenHeaderName]))
+            {
+                return new ForbidResult();
+            }
+
             try
             {
                 var json = await req.ReadAsStringAsync();
@@ -56,6 +63,11 @@ namespace TodoBot.Server
             ILogger log)
         {
             log.LogInformation($"{nameof(UpdateTodo)} method prosessing...");
+            if (!await lineTokenService.VerifyTokenAsync(req.Headers[ApiServer.AccessTokenHeaderName]))
+            {
+                return new ForbidResult();
+            }
+
             try
             {
                 var json = await req.ReadAsStringAsync();
@@ -82,6 +94,11 @@ namespace TodoBot.Server
             ILogger log)
         {
             log.LogInformation($"{nameof(GetTodoList)} method prosessing...");
+            if (!await lineTokenService.VerifyTokenAsync(req.Headers[ApiServer.AccessTokenHeaderName]))
+            {
+                return new ForbidResult();
+            }
+
             try
             {
                 var todolist = await todoRepository.GetTodoListAsync(userId);
@@ -105,6 +122,11 @@ namespace TodoBot.Server
             ILogger log)
         {
             log.LogInformation($"{nameof(GetTodoList)} method prosessing...");
+            if (!await lineTokenService.VerifyTokenAsync(req.Headers[ApiServer.AccessTokenHeaderName]))
+            {
+                return new ForbidResult();
+            }
+
             try
             {
                 var todo = await todoRepository.GetTodoAsync(userId, id);
@@ -128,6 +150,11 @@ namespace TodoBot.Server
             ILogger log)
         {
             log.LogInformation($"{nameof(DeleteTodoAsync)} method prosessing...");
+            if (!await lineTokenService.VerifyTokenAsync(req.Headers[ApiServer.AccessTokenHeaderName]))
+            {
+                return new ForbidResult();
+            }
+
             try
             {
                 await todoRepository.DeleteTodoAsync(userId, id);

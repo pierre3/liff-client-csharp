@@ -58,7 +58,7 @@ else
         }
         catch (Exception e)
         {
-            await JSRuntime.InvokeAsync<object>("liffInterop.alert", e.ToString());
+            ErrorMessage = e.ToString();
         }
     }
 
@@ -71,7 +71,7 @@ else
         }
         catch (Exception e)
         {
-            await JSRuntime.InvokeAsync<object>("liffInterop.alert", e.ToString());
+            ErrorMessage = e.ToString();
         }
     }
 

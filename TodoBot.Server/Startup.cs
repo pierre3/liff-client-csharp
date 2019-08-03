@@ -18,11 +18,16 @@ namespace TodoBot.Server
             builder.Services.AddTransient<ITodoRepository>(provider => 
             {
                 var configuration = provider.GetRequiredService<IConfiguration>();
-
                 var accountEndpoint = new Uri(configuration.GetValue<string>("Cosmos:AccountEndpoint"));
                 var accountKey = configuration.GetValue<string>("Cosmos:AccountKey");
-                
                 return new CosmosDbTodoRepository(accountEndpoint, accountKey);
+            });
+
+            builder.Services.AddSingleton<ILineTokenService>(provider =>
+            {
+                var configuration = provider.GetRequiredService<IConfiguration>();
+                var clientId = configuration.GetValue<string>("LineClientId");
+                return new LineTokenService(clientId);
             });
         }
     }

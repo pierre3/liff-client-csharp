@@ -18,6 +18,7 @@
         try
         {
             await Liff.InitializeAsync(JSRuntime);
+            await Liff.GetAccessTokenAsync();
         }
         catch (Exception e)
         {

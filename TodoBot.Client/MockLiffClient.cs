@@ -14,12 +14,13 @@ namespace TodoBot.Client
 
         public Profile Profile { get; private set; }
 
+        public string AccessToken { get; private set; }
         public Task CloseWindowAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<string> GetAccessTokenAsync()
+        public Task GetAccessTokenAsync()
         {
             throw new NotImplementedException();
         }

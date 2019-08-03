@@ -1,7 +1,7 @@
 ﻿@page "/create"
 @inject ILiffClient Liff
 @inject IJSRuntime JSRuntime
-@inject HttpClient httpClient
+@inject HttpClient HttpClient
 
 
 <TodoEditor Todo="new Todo() { DueDate = DateTime.Now}"
@@ -18,10 +18,7 @@
         try
         {
             todo.UserId = Liff.Data.Context.UserId;
-            //var token = await Liff.GetAccessTokenAsync();
-            var json = JsonConvert.SerializeObject(todo);
-            await httpClient.PostAsync("https://mytaskbot.azurewebsites.net/api/todoList",
-                new StringContent(json, System.Text.Encoding.UTF8, "application/json"));
+            await HttpClient.CreateTodoAsync(Liff.AccessToken, todo);
         }
         catch (Exception e)
         {

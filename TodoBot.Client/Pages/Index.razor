@@ -80,8 +80,8 @@ else
         </div>
     }
 }
-<Alert ErrorMessage="@ErrorMessage"></Alert>
-
+<Alert Message="@ErrorMessage" AlertType="danger"></Alert>
+<Alert Message="@InfoMessage" AlertType="info"></Alert>
 
 @code{
     enum FilterType
@@ -94,6 +94,7 @@ else
     FilterType Filter = FilterType.NotCompleted;
     IList<Todo> TodoList;
     string ErrorMessage;
+    string InfoMessage;
 
     protected override async Task OnInitAsync()
     {
@@ -126,6 +127,7 @@ else
             }
 
             var list = await HttpClient.GetTodoListAsync(Liff.AccessToken, Liff.Data.Context.UserId);
+            InfoMessage = $"Todo list count: {list.Count}";
             switch (Filter)
             {
                 case FilterType.NotCompleted:
@@ -141,6 +143,8 @@ else
                     TodoList = list.Where(todo => todo.Status == Status.Done || todo.Status == Status.Canceled).ToList();
                     break;
             }
+            InfoMessage = $"Filterd Todo list count: {TodoList.Count}";
+            
         }
         catch (Exception e)
         {

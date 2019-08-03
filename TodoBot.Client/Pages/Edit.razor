@@ -5,7 +5,7 @@
 
 @if (Todo == null)
 {
-    <p class="text-info">Loading...</p>
+    <img src="image/loading.gif" alt="Loading...">
 }
 else
 {
@@ -13,7 +13,7 @@ else
                 ButtonName="更新"
                 ButtonClickAsync="UpdateTodoAsync"></TodoEditor>
 }
-<Alert ErrorMessage="@ErrorMessage"></Alert>
+<Alert Message="@ErrorMessage" AlertType="danger"></Alert>
 
 @code{
     [Parameter]
@@ -27,7 +27,7 @@ else
     {
         try
         {
-            Todo = await HttpClient.GetTodoAsync(Liff.AccessToken,Liff.Data.Context.UserId,Id);
+            Todo = await HttpClient.GetTodoAsync(Liff.AccessToken, Liff.Data.Context.UserId, Id);
         }
         catch (Exception e)
         {

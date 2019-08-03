@@ -27,7 +27,7 @@
     </div>
     <button class="form-control btn btn-primary" @onclick="OnButtonClickAsync">@ButtonName</button>
 </div>
-<Alert ErrorMessage="@ErrorMessage"></Alert>    
+<Alert Message="@ErrorMessage" AlertType="danger"></Alert>    
 
 @code{
     [Parameter]

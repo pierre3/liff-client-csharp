@@ -1,8 +1,8 @@
-﻿@if (!string.IsNullOrEmpty(ErrorMessage))
+﻿@if (!string.IsNullOrEmpty(Message))
 {
-    <div class="alert-danger">
-        @ErrorMessage
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="@CloseButtonClick">
+    <div class="alert-@AlertType">
+        @Message
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" @onclick="CloseButtonClick">
             <span aria-hidden="true" class="oi oi-x"></span>
         </button>
     </div>
@@ -10,11 +10,13 @@
 
 @code{
     [Parameter]
-    string ErrorMessage { get; set; }
+    string Message { get; set; }
 
+    [Parameter]
+    string AlertType { get; set; } = "danger";
     private void CloseButtonClick()
     {
-        ErrorMessage = null;
+        Message = null;
         StateHasChanged();
     }
 

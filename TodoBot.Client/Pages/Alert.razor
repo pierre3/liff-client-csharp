@@ -3,7 +3,7 @@
     <div class="alert-danger">
         @ErrorMessage
         <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="@(ErrorMessage=null)">
-            <span aria-hidden="true">&times;</span>
+            <span aria-hidden="true" class="oi oi-x"></span>
         </button>
     </div>
 }
@@ -11,4 +11,11 @@
 @code{
     [Parameter]
     string ErrorMessage { get; set; }
+
+    private void CloseButtonClick()
+    {
+        ErrorMessage = null;
+        StateHasChanged();
+    }
+
 }

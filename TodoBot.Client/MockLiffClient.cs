@@ -20,7 +20,7 @@ namespace TodoBot.Client
             throw new NotImplementedException();
         }
 
-        public Task GetAccessTokenAsync()
+        public Task<string> GetAccessTokenAsync()
         {
             throw new NotImplementedException();
         }

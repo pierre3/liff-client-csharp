@@ -34,6 +34,7 @@ namespace LineDC.Liff
             if (Initialized) { return; }
             var json = await JSRuntime.InvokeAsync<string>("liffInterop.init");
             Data = JsonConvert.DeserializeObject<LiffData>(json);
+            await GetAccessTokenAsync();
             Initialized = true;
         }
 
@@ -49,8 +50,13 @@ namespace LineDC.Liff
         public async Task CloseWindowAsync()
             => await JSRuntime.InvokeAsync<object>("liff.closeWindow");
 
-        public async Task GetAccessTokenAsync()
-            => AccessToken= await JSRuntime.InvokeAsync<string>("liff.getAccessToken");
-
+        public async Task<string> GetAccessTokenAsync()
+        {
+            if (AccessToken == null)
+            {
+                AccessToken = await JSRuntime.InvokeAsync<string>("liff.getAccessToken");
+            }
+            return AccessToken;
+        }
     }
 }

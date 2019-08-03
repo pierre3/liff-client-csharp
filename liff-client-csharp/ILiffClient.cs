@@ -14,7 +14,7 @@ namespace LineDC.Liff
 
         Task InitializeAsync(IJSRuntime jSRuntime);
         Task LoadProfileAsync();
-        Task GetAccessTokenAsync();
+        Task<string> GetAccessTokenAsync();
         Task SendMessagesAsync(object messages);
         Task CloseWindowAsync();
         Task OpenWindowAsync(string url, bool external);

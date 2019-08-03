@@ -7,7 +7,26 @@
 </div>
 
 <div class="main">
-    <div class="content px-4">
+    <div class="content px-2">
         @Body
+        <TodoBot.Client.Pages.Alert ErrorMessage="@ErrorMessage"/>
     </div>
 </div>
+
+@code
+{
+    string ErrorMessage;
+    protected override async Task OnInitAsync()
+    {
+        ErrorMessage = null;
+        try
+        {
+            await Liff.InitializeAsync(JSRuntime);
+        }
+        catch (Exception e)
+        {
+            ErrorMessage = e.ToString();
+        }
+        
+    }
+}

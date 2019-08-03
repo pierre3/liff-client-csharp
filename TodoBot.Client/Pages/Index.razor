@@ -4,82 +4,81 @@
 @inject HttpClient HttpClient
 @inject IUriHelper UriHelper
 
+<header class="navbar navbar-light sticky-top mb-2" style="background-color: #e3f2fd;">
+    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group btn-group-toggle mr-2" data-toggle="buttons">
+            <button class="btn btn-info @(Filter == FilterType.NotCompleted? "active" : "")"
+                    @onclick="async ()=>await FilterAsync(FilterType.NotCompleted)">
+                <span class="text-sm-center">未完了</span>
+            </button>
+            <button class="btn btn-info @(Filter == FilterType.Ready? "active" : "")"
+                    @onclick="async ()=>await FilterAsync(FilterType.Ready)">
+                <span class="text-sm-center">New!</span>
+            </button>
+            <button class="btn btn-info @(Filter == FilterType.Doing? "active" : "")"
+                    @onclick="async ()=>await FilterAsync(FilterType.Doing)">
+                <span class="text-sm-center">実施中</span>
+            </button>
+            <button class="btn btn-info @(Filter == FilterType.Completed? "active" : "")"
+                    @onclick="async ()=>await FilterAsync(FilterType.Completed)">
+                <span class="text-sm-center">完了</span>
+            </button>
+        </div>
+        <div class="btn-group" role="group" aria-label="Second group">
+            <button type="button" class="btn btn-outline-dark" @onclick="Create">
+                <span class="oi oi-plus"></span>
+            </button>
+        </div>
+    </div>
+</header>
 @if (TodoList == null)
 {
-    <img src="image/loading.gif" alt="Loading...">
+<img src="image/loading.gif" alt="Loading...">
 }
 else
 {
-    <header class="navbar navbar-light sticky-top mb-2" style="background-color: #e3f2fd;">
-        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-            <div class="btn-group btn-group-toggle mr-2" data-toggle="buttons">
-                <button class="btn btn-info @(Filter == FilterType.NotCompleted? "active" : "")"
-                        @onclick="async ()=>await FilterAsync(FilterType.NotCompleted)">
-                    未完了
-                </button>
-                <button class="btn btn-info @(Filter == FilterType.Ready? "active" : "")"
-                        @onclick="async ()=>await FilterAsync(FilterType.Ready)">
-                    New!
-                </button>
-                <button class="btn btn-info @(Filter == FilterType.Doing? "active" : "")"
-                        @onclick="async ()=>await FilterAsync(FilterType.Doing)">
-                    実施中
-                </button>
-                <button class="btn btn-info @(Filter == FilterType.Completed? "active" : "")"
-                        @onclick="async ()=>await FilterAsync(FilterType.Completed)">
-                    完了
-                </button>
-            </div>
-            <div class="btn-group" role="group" aria-label="Second group">
-                <button type="button" class="btn btn-outline-dark" @onclick="Create">
-                    <span class="oi oi-plus"></span>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    @foreach (var todo in TodoList)
+@foreach (var todo in TodoList)
     {
-        <div class="card shadow mb-3" style="max-width: 20rem;">
-            <div class="card-header">
-                @switch (todo.Status)
+<div class="card shadow mb-3" style="max-width: 20rem;">
+    <div class="card-header">
+        @switch (todo.Status)
                 {
                     case Status.Ready:
-                        <span class="badge-info badge-pill p-2 mr-2">@todo.Status</span>
+        <span class="badge-info badge-pill p-2 mr-2">@todo.Status</span>
                         break;
                     case Status.Doing:
-                        <span class="badge-primary badge-pill p-2 mr-2">@todo.Status</span>
+        <span class="badge-primary badge-pill p-2 mr-2">@todo.Status</span>
                         break;
                     case Status.Done:
-                        <span class="badge-success badge-pill p-2 mr-2">@todo.Status</span>
+        <span class="badge-success badge-pill p-2 mr-2">@todo.Status</span>
                         break;
                     case Status.Canceled:
-                        <span class="badge-secondary badge-pill p-2 mr-2">@todo.Status</span>
+        <span class="badge-secondary badge-pill p-2 mr-2">@todo.Status</span>
                         break;
                 }
-                <span class="card-text">期限:&nbsp;@todo.DueDate.ToString("yyyy/MM/dd")</span>
-                <button class="btn btn-secondary btn-sm float-right" @onclick="()=>Edit(todo.Id)"><span class="oi oi-pencil"></span></button>
-            </div>
-            <div class="card-body">
-                <h5 class="card-title">@todo.Title</h5>
-                <p class="card-text">@todo.Content</p>
-            </div>
-            <div class="card-footer text-center">
+        <span class="card-text">期限:&nbsp;@todo.DueDate.ToString("yyyy/MM/dd")</span>
+        <button class="btn btn-secondary btn-sm float-right" @onclick="()=>Edit(todo.Id)"><span class="oi oi-pencil"></span></button>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">@todo.Title</h5>
+        <p class="card-text">@todo.Content</p>
+    </div>
+    <div class="card-footer text-center">
 
-                @if (todo.Status == Status.Ready)
+        @if (todo.Status == Status.Ready)
                 {
-                    <button class="btn btn-primary" @onclick="@(async ()=> await UpdateStatusAsync(todo,Status.Doing))">やる！</button>
+        <button class="btn btn-primary" @onclick="@(async ()=> await UpdateStatusAsync(todo,Status.Doing))">やる！</button>
                 }
-                @if (todo.Status == Status.Doing)
+        @if (todo.Status == Status.Doing)
                 {
-                    <button class="btn btn-success" @onclick="@(async ()=> await UpdateStatusAsync(todo,Status.Done))">完了にする</button>
+        <button class="btn btn-success" @onclick="@(async ()=> await UpdateStatusAsync(todo,Status.Done))">完了にする</button>
                 }
-                @if (todo.Status == Status.Done || todo.Status == Status.Canceled)
+        @if (todo.Status == Status.Done || todo.Status == Status.Canceled)
                 {
-                    <button class="btn btn-danger" @onclick="@(async ()=> await DeleteAsync(todo.Id))">削除</button>
+        <button class="btn btn-danger" @onclick="@(async ()=> await DeleteAsync(todo.Id))">削除</button>
                 }
-            </div>
-        </div>
+    </div>
+</div>
     }
 }
 <Alert ErrorMessage="@ErrorMessage"></Alert>
@@ -115,6 +114,7 @@ else
     private async Task ListTodoAsync()
     {
         ErrorMessage = null;
+        TodoList=null;
         try
         {
             var list = await HttpClient.GetTodoListAsync(Liff.AccessToken, Liff.Data.Context.UserId);

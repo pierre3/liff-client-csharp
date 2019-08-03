@@ -18,7 +18,7 @@ namespace TodoBot.Server.Services
         public async Task<bool> VerifyTokenAsync(string accessToken)
         {
             if (string.IsNullOrEmpty(accessToken)) { return false; }
-            var response = await httpClient.GetStringAsync($"{url}?{accessToken}");
+            var response = await httpClient.GetStringAsync($"{url}?access_token={accessToken}");
             var result = JsonConvert.DeserializeAnonymousType(response, new { scope = "", client_id = "", expires_in= 0 });
             return result?.client_id == clientId;
         }

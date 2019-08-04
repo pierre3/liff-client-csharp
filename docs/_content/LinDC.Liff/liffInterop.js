@@ -1,8 +1,7 @@
 ﻿window.liffInterop = {
     init: function () {
         return new Promise(function (resolve, reject) {
-            if (!liff)
-            {
+            if (!liff) {
                 reject("LIFF object not ready.");
                 return;
             }

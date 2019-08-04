@@ -34,7 +34,7 @@ namespace LineDC.Liff
             if (Initialized) { return; }
             var json = await JSRuntime.InvokeAsync<string>("liffInterop.init");
             Data = JsonConvert.DeserializeObject<LiffData>(json);
-            await GetAccessTokenAsync();
+            //await GetAccessTokenAsync();
             Initialized = true;
         }
 

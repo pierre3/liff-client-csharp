@@ -16,7 +16,7 @@ namespace LineDC.Liff
         public Profile Profile { get; protected set; }
 
         public string AccessToken { get; protected set; }
-
+        public string InternalError { get; protected set; }
         public LiffClient()
         { }
 
@@ -33,8 +33,15 @@ namespace LineDC.Liff
             JSRuntime = jSRuntime;
             if (Initialized) { return; }
             var json = await JSRuntime.InvokeAsync<string>("liffInterop.init").ConfigureAwait(false);
-            Data = JsonConvert.DeserializeObject<LiffData>(json);
-            Initialized = true;
+            try
+            {
+                Data = JsonConvert.DeserializeObject<LiffData>(json);
+                Initialized = true;
+            }
+            catch(Exception e)
+            {
+                InternalError = e.ToString();
+            }
         }
 
         public async Task LoadProfileAsync()

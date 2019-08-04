@@ -105,7 +105,12 @@ else
         try
         {
             await Liff.InitializeAsync(JSRuntime);
+            if(!string.IsNullOrEmpty(Liff.InternalError))
+            {
+                ErrorMessage = Liff.InternalError;
+            }
             InfoMessage += $"\nLiff.Initialized = {Liff.Initialized}";
+           
             await Liff.GetAccessTokenAsync();
             InfoMessage += $"\nLiff.AccessToken = {Liff.AccessToken}";
         }

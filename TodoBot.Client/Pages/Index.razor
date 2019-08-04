@@ -97,9 +97,14 @@ else
     string ErrorMessage;
     string InfoMessage;
 
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnAfterRenderAsync()
     {
-        InfoMessage = "Index > OnParametersSetAsync()";
+        InfoMessage = "Index > OnAfterRenderAsync()";
+        if(Liff.Initialized)
+        {
+              InfoMessage += "Liff already initialized.";  
+              return; 
+        }
         ErrorMessage = null;
         try
         {

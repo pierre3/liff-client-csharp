@@ -97,9 +97,9 @@ else
     string ErrorMessage;
     string InfoMessage;
 
-    protected override async Task OnInitAsync()
+    protected override async Task OnParametersSetAsync()
     {
-        InfoMessage = "Index > OnInitAsync()";
+        InfoMessage = "Index > OnParametersSetAsync()";
         ErrorMessage = null;
         try
         {

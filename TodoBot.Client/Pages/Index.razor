@@ -110,9 +110,22 @@ else
         {
             ErrorMessage = e.ToString();
         }
-        InfoMessage += $"Liff.Initialized: {Liff.Initialized}";
+        InfoMessage += $"\nLiff.Initialized: {Liff.Initialized}";
         await ListTodoAsync();
         StateHasChanged();
+    }
+
+    protected override async Task OnAfterRenderAsync()
+    {
+        InfoMessage += "\nIndex > OnAfterRenderdAsync()";
+        
+        if(!Liff.Initialized)
+        {
+            InfoMessage += "\nLIFF.Data not initialized.";
+        
+            await OnInitAsync();
+        }
+        
     }
 
     private async Task ListTodoAsync()

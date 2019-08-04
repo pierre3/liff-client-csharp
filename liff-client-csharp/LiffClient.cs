@@ -32,29 +32,29 @@ namespace LineDC.Liff
         {
             JSRuntime = jSRuntime;
             if (Initialized) { return; }
-            var json = await JSRuntime.InvokeAsync<string>("liffInterop.init");
+            var json = await JSRuntime.InvokeAsync<string>("liffInterop.init").ConfigureAwait(false);
             Data = JsonConvert.DeserializeObject<LiffData>(json);
             //await GetAccessTokenAsync();
             Initialized = true;
         }
 
         public async Task LoadProfileAsync()
-            => Profile = await JSRuntime.InvokeAsync<Profile>("liff.getProfile");
+            => Profile = await JSRuntime.InvokeAsync<Profile>("liff.getProfile").ConfigureAwait(false);
 
         public async Task SendMessagesAsync(object messages)
-            => await JSRuntime.InvokeAsync<object>("liff.sendMessages", messages);
+            => await JSRuntime.InvokeAsync<object>("liff.sendMessages", messages).ConfigureAwait(false);
 
         public async Task OpenWindowAsync(string url, bool external)
-            => await JSRuntime.InvokeAsync<object>("liff.openWindow", new { url, external });
+            => await JSRuntime.InvokeAsync<object>("liff.openWindow", new { url, external }).ConfigureAwait(false);
 
         public async Task CloseWindowAsync()
-            => await JSRuntime.InvokeAsync<object>("liff.closeWindow");
+            => await JSRuntime.InvokeAsync<object>("liff.closeWindow").ConfigureAwait(false);
 
         public async Task<string> GetAccessTokenAsync()
         {
             if (AccessToken == null)
             {
-                AccessToken = await JSRuntime.InvokeAsync<string>("liff.getAccessToken");
+                AccessToken = await JSRuntime.InvokeAsync<string>("liff.getAccessToken").ConfigureAwait(false);
             }
             return AccessToken;
         }

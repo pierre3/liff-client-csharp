@@ -11,7 +11,6 @@ namespace LineDC.Liff
         LiffData Data { get; }
         Profile Profile { get; }
         string AccessToken { get; }
-        string InternalError { get; }
 
         Task InitializeAsync(IJSRuntime jSRuntime);
         Task LoadProfileAsync();

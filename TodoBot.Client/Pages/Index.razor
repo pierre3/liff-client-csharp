@@ -94,7 +94,6 @@ else
     FilterType Filter = FilterType.NotCompleted;
     IList<Todo> TodoList;
     string ErrorMessage;
-    int retryCount = 0;
 
     protected override async Task OnInitAsync()
     {
@@ -103,11 +102,9 @@ else
         {
             if(!Liff.Initialized)
             {
-                await Task.Delay(1000);
-                await Liff.InitializeAsync(JSRuntime);
-                await Liff.GetAccessTokenAsync();
-           }
-           await ListTodoAsync();
+                ErrorMessage = "Liff.Initialized = false";
+            }
+            await ListTodoAsync();
         }
         catch (Exception e)
         {

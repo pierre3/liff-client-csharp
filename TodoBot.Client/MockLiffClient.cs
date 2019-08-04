@@ -15,8 +15,7 @@ namespace TodoBot.Client
         public Profile Profile { get; private set; }
 
         public string AccessToken { get; private set; }
-        public string InternalError { get; private set; }
-
+        
         public Task CloseWindowAsync()
         {
             throw new NotImplementedException();

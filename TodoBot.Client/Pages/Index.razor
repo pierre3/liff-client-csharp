@@ -104,6 +104,7 @@ else
         ErrorMessage = null;
         try
         {
+            await Task.Delay(500);
             await Liff.InitializeAsync(JSRuntime);
             if(!string.IsNullOrEmpty(Liff.InternalError))
             {

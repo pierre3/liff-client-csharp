@@ -110,6 +110,7 @@ else
         {
             ErrorMessage = e.ToString();
         }
+        InfoMessage += $"Liff.Initialized: {Liff.Initialized}";
         await ListTodoAsync();
         StateHasChanged();
     }

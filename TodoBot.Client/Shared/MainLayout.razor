@@ -9,15 +9,18 @@
 <div class="main">
     <div class="content px-2">
         @Body
-        <TodoBot.Client.Pages.Alert Message="@ErrorMessage" AlertType="danger"/>
+        <TodoBot.Client.Pages.Alert Message="@ErrorMessage" AlertType="danger" />
+        <TodoBot.Client.Pages.Alert Message="@InfoMessage" AlertType="info" />
     </div>
 </div>
 
 @code
 {
     string ErrorMessage;
+    string InfoMessage;
     protected override async Task OnInitAsync()
     {
+        InfoMessage = "MainLayout > OnInitAsync()";
         ErrorMessage = null;
         try
         {
@@ -26,7 +29,6 @@
         catch (Exception e)
         {
             ErrorMessage = e.ToString();
-        }
-        
+        } 
     }
 }

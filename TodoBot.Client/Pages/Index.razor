@@ -99,6 +99,7 @@ else
 
     protected override async Task OnInitAsync()
     {
+        InfoMessage = "Index > OnInitAsync()";
         ErrorMessage = null;
         try
         {
@@ -116,7 +117,7 @@ else
     {
         ErrorMessage = null;
         TodoList=null;
-        InfoMessage = "Loading todo list...";
+        InfoMessage += "\nLoading todo list...";
         try
         {
             if(string.IsNullOrEmpty(Liff.AccessToken))

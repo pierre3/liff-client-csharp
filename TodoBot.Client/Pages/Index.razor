@@ -96,7 +96,8 @@ else
     IList<Todo> TodoList;
     string ErrorMessage;
     string InfoMessage;
-    int retryCount =0;
+    int retryCount = 0;
+
     protected override async Task OnInitAsync()
     {
         InfoMessage = "Index > OnInitAsync()";
@@ -104,35 +105,21 @@ else
         ErrorMessage = null;
         try
         {
-            await Task.Delay(500);
+            await Task.Delay(1000);
             await Liff.InitializeAsync(JSRuntime);
-            if(!string.IsNullOrEmpty(Liff.InternalError))
-            {
-                ErrorMessage = Liff.InternalError;
-            }
-            InfoMessage += $"\nLiff.Initialized = {Liff.Initialized}";
-           
             await Liff.GetAccessTokenAsync();
-            InfoMessage += $"\nLiff.AccessToken = {Liff.AccessToken}";
-
             await ListTodoAsync();
         }
         catch (Exception e)
         {
             ErrorMessage = e.ToString();
-            if(!Liff.Initialized && ++retryCount < 3)
-            {
-                await OnInitAsync();
-            }
         }
-        
     }
 
     private async Task ListTodoAsync()
     {
         ErrorMessage = null;
         TodoList=null;
-        InfoMessage += "\nLoading todo list...";
         try
         {
             if(string.IsNullOrEmpty(Liff.AccessToken))
@@ -143,10 +130,8 @@ else
             {
                 ErrorMessage = "Liff.Data has not been initialized.";
             }
-            InfoMessage += $"Start -> GetTodoListAsync()";
-
+        
             var list = await HttpClient.GetTodoListAsync(Liff.AccessToken, Liff.Data.Context.UserId);
-            InfoMessage += $"\nTodo list count: {list.Count}";
             switch (Filter)
             {
                 case FilterType.NotCompleted:
@@ -162,7 +147,6 @@ else
                     TodoList = list.Where(todo => todo.Status == Status.Done || todo.Status == Status.Canceled).ToList();
                     break;
             }
-            InfoMessage += $"\nFilterd Todo list count: {TodoList.Count}";
             StateHasChanged();
         }
         catch (Exception e)

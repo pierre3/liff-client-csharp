@@ -9,28 +9,5 @@
 <div class="main">
     <div class="content px-2">
         @Body
-        <TodoBot.Client.Pages.Alert Message="@ErrorMessage" AlertType="danger"/>
     </div>
 </div>
-
-@code{
-    string ErrorMessage;
-    
-    protected override async Task OnInitAsync()
-    {
-        ErrorMessage = null;
-        try
-        {
-            if(!Liff.Initialized)
-            {
-                await Task.Delay(1000);
-                await Liff.InitializeAsync(JSRuntime);
-                await Liff.GetAccessTokenAsync();
-           }
-        }
-        catch (Exception e)
-        {
-            ErrorMessage = e.ToString();
-        }
-    }
-}

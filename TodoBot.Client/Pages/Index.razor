@@ -102,9 +102,11 @@ else
         {
             if(!Liff.Initialized)
             {
-                ErrorMessage = "Liff.Initialized = false";
-            }
-            await ListTodoAsync();
+                await Task.Delay(1000);
+                await Liff.InitializeAsync(JSRuntime);
+                await Liff.GetAccessTokenAsync();
+           }
+           await ListTodoAsync();
         }
         catch (Exception e)
         {

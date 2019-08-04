@@ -100,11 +100,14 @@ else
     protected override async Task OnInitAsync()
     {
         InfoMessage = "Index > OnInitAsync()";
-        
+
         ErrorMessage = null;
         try
         {
             await Liff.InitializeAsync(JSRuntime);
+            InfoMessage += $"\nLiff.Initialized = {Liff.Initialized}";
+            await Liff.GetAccessTokenAsync();
+            InfoMessage += $"\nLiff.AccessToken = {Liff.AccessToken}";
         }
         catch (Exception e)
         {
@@ -113,19 +116,6 @@ else
         InfoMessage += $"\nLiff.Initialized: {Liff.Initialized}";
         await ListTodoAsync();
         StateHasChanged();
-    }
-
-    protected override async Task OnAfterRenderAsync()
-    {
-        InfoMessage += "\nIndex > OnAfterRenderdAsync()";
-        
-        if(!Liff.Initialized)
-        {
-            InfoMessage += "\nLIFF.Data not initialized.";
-        
-            await OnInitAsync();
-        }
-        
     }
 
     private async Task ListTodoAsync()
@@ -144,7 +134,7 @@ else
                 ErrorMessage = "Liff.Data has not been initialized.";
             }
             InfoMessage += $"Start -> GetTodoListAsync()";
-            
+
             var list = await HttpClient.GetTodoListAsync(Liff.AccessToken, Liff.Data.Context.UserId);
             InfoMessage += $"\nTodo list count: {list.Count}";
             switch (Filter)
@@ -163,7 +153,7 @@ else
                     break;
             }
             InfoMessage += $"\nFilterd Todo list count: {TodoList.Count}";
-            
+
         }
         catch (Exception e)
         {

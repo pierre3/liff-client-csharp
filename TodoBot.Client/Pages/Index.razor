@@ -96,15 +96,11 @@ else
     IList<Todo> TodoList;
     string ErrorMessage;
     string InfoMessage;
-
+    int retryCount =0;
     protected override async Task OnInitAsync()
     {
         InfoMessage = "Index > OnInitAsync()";
-        if(!Liff.Initialized)
-        {
-            UriHelper.NavigateTo($"{UriHelper.GetBaseUri()}initialize");
-            return;
-        }
+        
         ErrorMessage = null;
         try
         {
@@ -118,14 +114,18 @@ else
            
             await Liff.GetAccessTokenAsync();
             InfoMessage += $"\nLiff.AccessToken = {Liff.AccessToken}";
+
+            await ListTodoAsync();
         }
         catch (Exception e)
         {
             ErrorMessage = e.ToString();
+            if(!Liff.Initialized && ++retryCount < 3)
+            {
+                await OnInitAsync();
+            }
         }
-        InfoMessage += $"\nLiff.Initialized: {Liff.Initialized}";
-        await ListTodoAsync();
-        StateHasChanged();
+        
     }
 
     private async Task ListTodoAsync()
@@ -163,7 +163,7 @@ else
                     break;
             }
             InfoMessage += $"\nFilterd Todo list count: {TodoList.Count}";
-
+            StateHasChanged();
         }
         catch (Exception e)
         {
@@ -175,7 +175,6 @@ else
     {
         Filter = filterType;
         await ListTodoAsync();
-        this.StateHasChanged();
     }
 
 

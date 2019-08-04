@@ -29,7 +29,6 @@
         </button>
     </div>
 </header>
-<Alert Message="@InfoMessage" AlertType="info"></Alert>
 
 @if (TodoList == null)
 {
@@ -95,20 +94,20 @@ else
     FilterType Filter = FilterType.NotCompleted;
     IList<Todo> TodoList;
     string ErrorMessage;
-    string InfoMessage;
     int retryCount = 0;
 
     protected override async Task OnInitAsync()
     {
-        InfoMessage = "Index > OnInitAsync()";
-        
         ErrorMessage = null;
         try
         {
-            await Task.Delay(1000);
-            await Liff.InitializeAsync(JSRuntime);
-            await Liff.GetAccessTokenAsync();
-            await ListTodoAsync();
+            if(!Liff.Initialized)
+            {
+                await Task.Delay(1000);
+                await Liff.InitializeAsync(JSRuntime);
+                await Liff.GetAccessTokenAsync();
+           }
+           await ListTodoAsync();
         }
         catch (Exception e)
         {

@@ -100,7 +100,11 @@ else
     protected override async Task OnInitAsync()
     {
         InfoMessage = "Index > OnInitAsync()";
-
+        if(!Liff.Initialized)
+        {
+            UriHelper.NavigateTo($"{UriHelper.GetBaseUri()}initialize");
+            return;
+        }
         ErrorMessage = null;
         try
         {

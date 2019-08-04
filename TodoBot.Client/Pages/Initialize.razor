@@ -1,0 +1,40 @@
+﻿@page "/initialize"
+@inject ILiffClient Liff
+@inject IJSRuntime JSRuntime
+@inject IUriHelper UriHelper
+
+
+<img src="image/loading.gif" alt="Loading...">
+<Alert Message="@ErrorMessage" AlertType="danger"></Alert>
+<Alert Message="@InfoMessage" AlertType="info"></Alert>
+
+@code{
+    string ErrorMessage;
+    string InfoMessage;
+
+    protected override async Task OnInitAsync()
+    {
+        InfoMessage = "Initialize > OnInitAsync()";
+
+        ErrorMessage = null;
+        try
+        {
+            await Task.Delay(500);
+            await Liff.InitializeAsync(JSRuntime);
+            if(!string.IsNullOrEmpty(Liff.InternalError))
+            {
+                ErrorMessage = Liff.InternalError;
+            }
+            InfoMessage += $"\nLiff.Initialized = {Liff.Initialized}";
+
+            await Liff.GetAccessTokenAsync();
+            InfoMessage += $"\nLiff.AccessToken = {Liff.AccessToken}";
+        }
+        catch (Exception e)
+        {
+            ErrorMessage = e.ToString();
+        }
+        InfoMessage += $"\nLiff.Initialized: {Liff.Initialized}";
+        UriHelper.NavigateTo($"{UriHelper.GetBaseUri()}index");
+    }
+}

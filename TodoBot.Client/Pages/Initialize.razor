@@ -35,6 +35,7 @@
             ErrorMessage = e.ToString();
         }
         InfoMessage += $"\nLiff.Initialized: {Liff.Initialized}";
+        await Task.Delay(3000);
         UriHelper.NavigateTo($"{UriHelper.GetBaseUri()}index");
     }
 }

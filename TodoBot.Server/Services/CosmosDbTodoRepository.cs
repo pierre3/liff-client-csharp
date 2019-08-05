@@ -26,7 +26,7 @@ namespace TodoBot.Server.Services
             documentClient.CreateDocumentCollectionIfNotExistsAsync(UriFactory.CreateDatabaseUri(dbName), todoList).Wait();
         }
 
-        public async Task<string> CreateTodoAsync(Todo todo)
+        public async Task CreateTodoAsync(Todo todo)
         {
             try
             {
@@ -34,7 +34,6 @@ namespace TodoBot.Server.Services
                         UriFactory.CreateDocumentCollectionUri(dbName, collectionName),
                         todo);
 
-                return doc.Resource.Id;
             }
             catch (Exception e)
             {

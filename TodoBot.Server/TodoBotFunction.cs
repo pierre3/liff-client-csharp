@@ -42,9 +42,9 @@ namespace TodoBot.Server
                     return new BadRequestObjectResult(JsonConvert.SerializeObject(new { Message = $"{nameof(todo.UserId)} is required." }));
                 }
 
-                var id = await todoRepository.CreateTodoAsync(todo);
+                await todoRepository.CreateTodoAsync(todo);
 
-                return new CreatedResult("", JsonConvert.SerializeObject(new { id }));
+                return new CreatedResult("","Created");
             }
             catch (JsonSerializationException e)
             {

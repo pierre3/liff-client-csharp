@@ -15,12 +15,21 @@ namespace TodoBot.Server
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
+            //Use Cosmos DB
+            //builder.Services.AddTransient<ITodoRepository>(provider => 
+            //{
+            //    var configuration = provider.GetRequiredService<IConfiguration>();
+            //    var accountEndpoint = new Uri(configuration.GetValue<string>("Cosmos:AccountEndpoint"));
+            //    var accountKey = configuration.GetValue<string>("Cosmos:AccountKey");
+            //    return new CosmosDbTodoRepository(accountEndpoint, accountKey);
+            //});
+
+            //Use Azure Table Storage
             builder.Services.AddTransient<ITodoRepository>(provider => 
             {
                 var configuration = provider.GetRequiredService<IConfiguration>();
-                var accountEndpoint = new Uri(configuration.GetValue<string>("Cosmos:AccountEndpoint"));
-                var accountKey = configuration.GetValue<string>("Cosmos:AccountKey");
-                return new CosmosDbTodoRepository(accountEndpoint, accountKey);
+                var connectionString = configuration.GetValue<string>("AzureWebJobsStorage");
+                return new CloudTableRepository(connectionString);
             });
 
             builder.Services.AddSingleton<ILineTokenService>(provider =>

@@ -133,7 +133,7 @@ else
                 return;
             }
         
-            var SourceTodoList = await HttpClient.GetTodoListAsync(Liff.AccessToken, Liff.Data.Context.UserId);
+            SourceTodoList = await HttpClient.GetTodoListAsync(Liff.AccessToken, Liff.Data.Context.UserId);
             FilterTodoList(Filter);
             
         }

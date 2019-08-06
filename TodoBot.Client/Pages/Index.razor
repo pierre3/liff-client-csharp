@@ -8,19 +8,19 @@
     <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
             <button class="btn btn-info @(Filter == FilterType.NotCompleted? "active" : "")"
-                    @onclick="async ()=>await FilterAsync(FilterType.NotCompleted)">
+                    @onclick="()=>FilterTodoList(FilterType.NotCompleted)">
                 <span class="text-sm-center">未完</span>
             </button>
             <button class="btn btn-info @(Filter == FilterType.Ready? "active" : "")"
-                    @onclick="async ()=>await FilterAsync(FilterType.Ready)">
+                    @onclick="()=>FilterTodoList(FilterType.Ready)">
                 <span class="text-sm-center">New!</span>
             </button>
             <button class="btn btn-info @(Filter == FilterType.Doing? "active" : "")"
-                    @onclick="async ()=>await FilterAsync(FilterType.Doing)">
+                    @onclick="()=>FilterTodoList(FilterType.Doing)">
                 <span class="text-sm-center">実施中</span>
             </button>
             <button class="btn btn-info @(Filter == FilterType.Completed? "active" : "")"
-                    @onclick="async ()=>await FilterAsync(FilterType.Completed)">
+                    @onclick="()=>FilterTodoList(FilterType.Completed)">
                 <span class="text-sm-center">完了</span>
             </button>
         </div>
@@ -30,7 +30,7 @@
     </div>
 </header>
 
-@if (TodoList == null)
+@if (SourceTodoList == null)
 {
     <img src="image/loading.gif" alt="Loading...">
 }
@@ -93,6 +93,8 @@ else
     }
     FilterType Filter = FilterType.NotCompleted;
     IList<Todo> TodoList;
+    IList<Todo> SourceTodoList;
+
     string ErrorMessage;
 
     protected override async Task OnInitAsync()
@@ -117,7 +119,7 @@ else
     private async Task ListTodoAsync()
     {
         ErrorMessage = null;
-        TodoList=null;
+        SourceTodoList=null;
         try
         {
             if(string.IsNullOrEmpty(Liff.AccessToken))
@@ -129,23 +131,9 @@ else
                 ErrorMessage = "Liff.Data has not been initialized.";
             }
         
-            var list = await HttpClient.GetTodoListAsync(Liff.AccessToken, Liff.Data.Context.UserId);
-            switch (Filter)
-            {
-                case FilterType.NotCompleted:
-                    TodoList = list.Where(todo => todo.Status != Status.Done && todo.Status != Status.Canceled).ToList();
-                    break;
-                case FilterType.Ready:
-                    TodoList = list.Where(todo => todo.Status == Status.Ready).ToList();
-                    break;
-                case FilterType.Doing:
-                    TodoList = list.Where(todo => todo.Status == Status.Doing).ToList();
-                    break;
-                case FilterType.Completed:
-                    TodoList = list.Where(todo => todo.Status == Status.Done || todo.Status == Status.Canceled).ToList();
-                    break;
-            }
-            StateHasChanged();
+            var SourceTodoList = await HttpClient.GetTodoListAsync(Liff.AccessToken, Liff.Data.Context.UserId);
+            FilterTodoList(Filter);
+            
         }
         catch (Exception e)
         {
@@ -153,10 +141,25 @@ else
         }
     }
 
-    private async Task FilterAsync(FilterType filterType)
+    private void FilterTodoList(FilterType filterType)
     {
         Filter = filterType;
-        await ListTodoAsync();
+        switch (Filter)
+        {
+            case FilterType.NotCompleted:
+                TodoList = SourceTodoList.Where(todo => todo.Status != Status.Done && todo.Status != Status.Canceled).ToList();
+                break;
+            case FilterType.Ready:
+                TodoList = SourceTodoList.Where(todo => todo.Status == Status.Ready).ToList();
+                break;
+            case FilterType.Doing:
+                TodoList = SourceTodoList.Where(todo => todo.Status == Status.Doing).ToList();
+                break;
+            case FilterType.Completed:
+                TodoList = SourceTodoList.Where(todo => todo.Status == Status.Done || todo.Status == Status.Canceled).ToList();
+                break;
+        }
+        StateHasChanged();
     }
 
 

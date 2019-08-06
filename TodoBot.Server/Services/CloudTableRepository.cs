@@ -29,6 +29,7 @@ namespace TodoBot.Server.Services
         {
             try
             {
+                todo.Id = Guid.NewGuid().ToString().Replace("-", "");
                 await tableStore.InsertAsync(todo);               
             }
             catch (Exception e)

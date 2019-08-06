@@ -11,13 +11,13 @@ namespace TodoBot.Server.Services
     {
         private readonly PocoTableStore<Todo, string, string> tableStore;
         private readonly string tableName = "TodoList";
-        
+
         public CloudTableRepository(string connectionString)
         {
             tableStore = new PocoTableStore<Todo, string, string>(
-                tableName, 
+                tableName,
                 connectionString,
-                partitionProperty: todo => todo.UserId, 
+                partitionProperty: todo => todo.UserId,
                 rowProperty: todo => todo.Id);
             if (!tableStore.TableExists())
             {
@@ -25,68 +25,40 @@ namespace TodoBot.Server.Services
             }
         }
 
-        public async Task CreateTodoAsync(Todo todo)
+        public async Task<string> CreateTodoAsync(Todo todo)
         {
-            try
-            {
-                todo.Id = Guid.NewGuid().ToString().Replace("-", "");
-                await tableStore.InsertAsync(todo);               
-            }
-            catch (Exception e)
-            {
-                throw new TodoRepositoryException($"An error occurred in the {nameof(CreateTodoAsync)} methods.", e);
-            }
+
+            todo.Id = Guid.NewGuid().ToString().Replace("-", "");
+            await tableStore.InsertAsync(todo);
+            return todo.Id;
+
         }
 
         public async Task UpdateTodoAsync(string id, Todo todo)
         {
-            try
-            {
-                todo.Id = id;
-                await tableStore.UpdateAsync(todo);
-            }
-            catch (Exception e)
-            {
-                throw new TodoRepositoryException($"An error occurred in the {nameof(UpdateTodoAsync)} methods.", e);
-            }
+
+            todo.Id = id;
+            await tableStore.UpdateAsync(todo);
+
         }
 
         public async Task<IList<Todo>> GetTodoListAsync(string userId)
         {
-            try
-            {
-                var query = await tableStore.GetByPartitionKeyAsync(userId);
-                return query.OrderBy(todo => todo.DueDate).ToList();
-                
-            }
-            catch (Exception e)
-            {
-                throw new TodoRepositoryException($"An error occurred in the {nameof(GetTodoListAsync)} methods.", e);
-            }
+
+            var query = await tableStore.GetByPartitionKeyAsync(userId);
+            return query.OrderBy(todo => todo.DueDate).ToList();
+
         }
 
         public Task<Todo> GetTodoAsync(string userId, string id)
         {
-            try
-            {
-                return tableStore.GetRecordAsync(userId, id);
-            }
-            catch (Exception e)
-            {
-                throw new TodoRepositoryException($"An error occurred in the {nameof(GetTodoAsync)} methods.", e);
-            }
+            return tableStore.GetRecordAsync(userId, id);
         }
 
         public async Task DeleteTodoAsync(string userId, string id)
         {
-            try
-            {
-                await tableStore.DeleteAsync(new Todo() { UserId = userId, Id = id });
-            }
-            catch (Exception e)
-            {
-                throw new TodoRepositoryException($"An error occurred in the {nameof(DeleteTodoAsync)} methods.", e);
-            }
+            await tableStore.DeleteAsync(new Todo() { UserId = userId, Id = id });
+
         }
     }
 }

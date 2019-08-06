@@ -4,6 +4,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System;
 using System.Threading.Tasks;
 using TodoBot.Server.Services;
 using TodoBot.Shared;
@@ -11,7 +12,7 @@ using TodoBot.Shared;
 namespace TodoBot.Server
 {
     public class TodoBotFunction
-    {   
+    {
         private readonly ITodoRepository todoRepository;
         private readonly ILineTokenService lineTokenService;
 
@@ -23,11 +24,11 @@ namespace TodoBot.Server
 
         [FunctionName("CreateTodo")]
         public async Task<IActionResult> CreateTodo(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "todoList")] HttpRequest req, 
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "todoList")] HttpRequest req,
             ILogger log)
         {
             log.LogInformation($"{nameof(CreateTodo)} method prosessing...");
-            if(!await lineTokenService.VerifyTokenAsync(req.Headers[ApiServer.AccessTokenHeaderName]))
+            if (!await lineTokenService.VerifyTokenAsync(req.Headers[ApiServer.AccessTokenHeaderName]))
             {
                 return new ForbidResult();
             }
@@ -44,22 +45,19 @@ namespace TodoBot.Server
 
                 await todoRepository.CreateTodoAsync(todo);
 
-                return new CreatedResult("","Created");
+                return new CreatedResult("", $"{{\"id\":\"{todo.Id}\"}}");
             }
             catch (JsonSerializationException e)
             {
                 return new BadRequestObjectResult(e.Message);
             }
-            catch (TodoRepositoryException e)
-            {
-                return new BadRequestObjectResult($"{e.Message}: {e.InnerException.Message}");
-            }
+
         }
 
         [FunctionName("UpdateTodo")]
         public async Task<IActionResult> UpdateTodo(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "todoList/{id}")] HttpRequest req ,
-            string id, 
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "todoList/{id}")] HttpRequest req,
+            string id,
             ILogger log)
         {
             log.LogInformation($"{nameof(UpdateTodo)} method prosessing...");
@@ -80,10 +78,7 @@ namespace TodoBot.Server
             {
                 return new BadRequestObjectResult(e.Message);
             }
-            catch (TodoRepositoryException e)
-            {
-                return new BadRequestObjectResult($"{e.Message}: {e.InnerException.Message}");
-            }
+
 
         }
 
@@ -108,10 +103,7 @@ namespace TodoBot.Server
             {
                 return new BadRequestObjectResult(e.Message);
             }
-            catch (TodoRepositoryException e)
-            {
-                return new BadRequestObjectResult($"{e.Message}: {e.InnerException.Message}");
-            }
+
         }
 
         [FunctionName("GetTodo")]
@@ -132,14 +124,11 @@ namespace TodoBot.Server
                 var todo = await todoRepository.GetTodoAsync(userId, id);
                 return new OkObjectResult(todo);
             }
-            catch(JsonSerializationException e)
+            catch (JsonSerializationException e)
             {
                 return new BadRequestObjectResult(e.Message);
             }
-            catch(TodoRepositoryException e)
-            {
-                return new BadRequestObjectResult($"{e.Message}: {e.InnerException.Message}");
-            }
+
         }
 
         [FunctionName("DeleteTodo")]
@@ -164,10 +153,7 @@ namespace TodoBot.Server
             {
                 return new BadRequestObjectResult(e.Message);
             }
-            catch (TodoRepositoryException e)
-            {
-                return new BadRequestObjectResult($"{e.Message}: {e.InnerException.Message}");
-            }
+
         }
     }
 

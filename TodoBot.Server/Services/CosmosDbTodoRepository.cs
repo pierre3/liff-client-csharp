@@ -26,73 +26,53 @@ namespace TodoBot.Server.Services
             documentClient.CreateDocumentCollectionIfNotExistsAsync(UriFactory.CreateDatabaseUri(dbName), todoList).Wait();
         }
 
-        public async Task CreateTodoAsync(Todo todo)
+        public async Task<string> CreateTodoAsync(Todo todo)
         {
-            try
-            {
-                var doc = await documentClient.CreateDocumentAsync(
-                        UriFactory.CreateDocumentCollectionUri(dbName, collectionName),
-                        todo);
 
-            }
-            catch (Exception e)
-            {
-                throw new TodoRepositoryException($"An error occurred in the {nameof(CreateTodoAsync)} methods.", e);
-            }
+            var document = await documentClient.CreateDocumentAsync(
+                UriFactory.CreateDocumentCollectionUri(dbName, collectionName),
+                todo);
+
+            return document.Resource.Id;
         }
 
         public async Task UpdateTodoAsync(string id, Todo todo)
         {
-            try
-            {
-                todo.Id = id;
-                await documentClient.ReplaceDocumentAsync(
-                    UriFactory.CreateDocumentUri(dbName, collectionName, id),
-                    todo);
-            }
-            catch (Exception e)
-            {
-                throw new TodoRepositoryException($"An error occurred in the {nameof(UpdateTodoAsync)} methods.", e);
-            }
+
+            todo.Id = id;
+            await documentClient.ReplaceDocumentAsync(
+                UriFactory.CreateDocumentUri(dbName, collectionName, id),
+                todo);
+
         }
 
         public Task<IList<Todo>> GetTodoListAsync(string userId)
         {
-            try
-            {
-                var query = documentClient.CreateDocumentQuery<Todo>(
-                    UriFactory.CreateDocumentCollectionUri(dbName, collectionName),
-                    new FeedOptions() { PartitionKey = new PartitionKey(userId) })
-                    .AsEnumerable();
-                    
-                return Task.FromResult<IList<Todo>>(query.OrderBy(todo => todo.DueDate).ToList());
-                
-            }
-            catch (Exception e)
-            {
-                throw new TodoRepositoryException($"An error occurred in the {nameof(GetTodoListAsync)} methods.", e);
-            }
+
+            var query = documentClient.CreateDocumentQuery<Todo>(
+                UriFactory.CreateDocumentCollectionUri(dbName, collectionName),
+                new FeedOptions() { PartitionKey = new PartitionKey(userId) })
+                .AsEnumerable();
+
+            return Task.FromResult<IList<Todo>>(query.OrderBy(todo => todo.DueDate).ToList());
+
+
         }
 
         public async Task<Todo> GetTodoAsync(string userId, string id)
         {
             var doc = await documentClient.ReadDocumentAsync<Todo>(UriFactory.CreateDocumentUri(dbName, collectionName, id)
-                ,new RequestOptions() { PartitionKey=new PartitionKey(userId)});
+                , new RequestOptions() { PartitionKey = new PartitionKey(userId) });
             return doc.Document;
         }
 
         public async Task DeleteTodoAsync(string userId, string id)
         {
-            try
-            {
-                await documentClient.DeleteDocumentAsync(
-                    UriFactory.CreateDocumentUri(dbName, collectionName, id),
-                    new RequestOptions() { PartitionKey = new PartitionKey(userId)});
-            }
-            catch (Exception e)
-            {
-                throw new TodoRepositoryException($"An error occurred in the {nameof(DeleteTodoAsync)} methods.", e);
-            }
+
+            await documentClient.DeleteDocumentAsync(
+                UriFactory.CreateDocumentUri(dbName, collectionName, id),
+                new RequestOptions() { PartitionKey = new PartitionKey(userId) });
+
         }
     }
 }

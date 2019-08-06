@@ -125,10 +125,12 @@ else
             if(string.IsNullOrEmpty(Liff.AccessToken))
             {
                 ErrorMessage = "Could not get the accessToken.";
+                return;
             }
             if(string.IsNullOrEmpty(Liff?.Data?.Context?.UserId))
             {
                 ErrorMessage = "Liff.Data has not been initialized.";
+                return;
             }
         
             var SourceTodoList = await HttpClient.GetTodoListAsync(Liff.AccessToken, Liff.Data.Context.UserId);
@@ -144,6 +146,8 @@ else
     private void FilterTodoList(FilterType filterType)
     {
         Filter = filterType;
+
+        if(SourceTodoList == null){ return; }
         switch (Filter)
         {
             case FilterType.NotCompleted:

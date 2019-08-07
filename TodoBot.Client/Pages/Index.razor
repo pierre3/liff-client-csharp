@@ -104,7 +104,6 @@ else
         {
             if(!Liff.Initialized)
             {
-                await Task.Delay(1000);
                 await Liff.InitializeAsync(JSRuntime);
                 await Liff.GetAccessTokenAsync();
            }
